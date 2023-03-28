@@ -8,3 +8,4 @@ project(
 )
 
 add_subdirectory(ma-window)
+add_subdirectory(sandbox)

@@ -19,9 +19,12 @@
 
 #include <ma-window/ma-window.h>
 #include <stdlib.h>
+#include <X11/Xlib.h>
 
 typedef struct {
     MaWindow parent;
+    Display *display;
+    Window xwindow;
 } X11Window;
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
@@ -29,5 +32,23 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
     window->parent.width = width;
     window->parent.height = height;
     window->parent.title = title;
+
+    window->display = XOpenDisplay(NULL);
+    if (window->display == NULL) {
+        free(window);
+        return NULL;
+    }
+
+    window->xwindow = XCreateSimpleWindow(window->display, DefaultRootWindow(window->display), 0, 0, width, height, 0, 0, 0);
+
+    XMapWindow(window->display, window->xwindow);
+    XFlush(window->display);
     return (MaWindow *)window;
+}
+
+void maWindowFree(MaWindow *window) {
+    X11Window *x11window = (X11Window *)window;
+    XDestroyWindow(x11window->display, x11window->xwindow);
+    XCloseDisplay(x11window->display);
+    free(window);
 }
