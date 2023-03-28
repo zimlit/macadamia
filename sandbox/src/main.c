@@ -21,7 +21,9 @@
 
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
-    while (1) {}
+    while (maWindowPollEvents(window)) {
+        // Do stuff
+    }
     maWindowFree(window);
     return 0;
 }

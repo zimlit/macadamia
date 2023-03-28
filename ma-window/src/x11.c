@@ -25,6 +25,7 @@ typedef struct {
     MaWindow parent;
     Display *display;
     Window xwindow;
+    Atom wmDeleteMessage;
 } X11Window;
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
@@ -39,7 +40,12 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
         return NULL;
     }
 
-    window->xwindow = XCreateSimpleWindow(window->display, DefaultRootWindow(window->display), 0, 0, width, height, 0, 0, 0);
+    int blackColor = BlackPixel(window->display, DefaultScreen(window->display));
+    window->xwindow = XCreateSimpleWindow(window->display, DefaultRootWindow(window->display), 0, 0, width, height, 0, blackColor, blackColor);
+    XSelectInput(window->display, window->xwindow, StructureNotifyMask);
+
+    window->wmDeleteMessage = XInternAtom(window->display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(window->display, window->xwindow, &window->wmDeleteMessage, 1);
 
     XMapWindow(window->display, window->xwindow);
     XFlush(window->display);
@@ -51,4 +57,21 @@ void maWindowFree(MaWindow *window) {
     XDestroyWindow(x11window->display, x11window->xwindow);
     XCloseDisplay(x11window->display);
     free(window);
+}
+
+bool maWindowPollEvents(MaWindow *window) {
+    X11Window *x11window = (X11Window *)window;
+    XEvent event;
+    if (XPending(x11window->display) > 0) {
+        XNextEvent(x11window->display, &event);
+        switch (event.type) {
+            case ClientMessage:
+                if (event.xclient.data.l[0] == x11window->wmDeleteMessage) {
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return true;
 }

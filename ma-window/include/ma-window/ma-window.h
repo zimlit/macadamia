@@ -18,6 +18,8 @@
 #ifndef MA_WINDOW_H
 #define MA_WINDOW_H
 
+#include <stdbool.h>
+
 typedef struct {
     int width;
     int height;
@@ -26,5 +28,6 @@ typedef struct {
 
 MaWindow *maWindowNew(int width, int height, const char *title);
 void maWindowFree(MaWindow *window);
+bool maWindowPollEvents(MaWindow *window);
 
 #endif
