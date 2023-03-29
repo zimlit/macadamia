@@ -1,4 +1,4 @@
-add_library(ma-window include/ma-window/ma-window.h)
+add_library(ma-window src/ma-window.c include/ma-window/ma-window.h)
 
 target_include_directories(ma-window PUBLIC include)
 

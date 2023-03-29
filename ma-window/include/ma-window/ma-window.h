@@ -25,12 +25,17 @@ typedef struct {
     int height;
     const char *title;
     bool hasGlContext;
+    void (*mouseMovedCallback)(int x, int y);
+    void (*resizeCallback)(int width, int height);
 } MaWindow;
 
 MaWindow *maWindowNew(int width, int height, const char *title);
 void maWindowFree(MaWindow *window);
 bool maWindowPollEvents(MaWindow *window);
 void maWindowSwapBuffers(MaWindow *window);
+
+void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y));
+void maWindowResizeCallback(MaWindow *window, void (*callback)(int width, int height));
 
 // OPENGL
 bool maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);

@@ -27,7 +27,6 @@
 
 typedef GLXContext (*glXCreateContextAttribsARBProc)
     (Display*, GLXFBConfig, GLXContext, Bool, const int*);
-
 typedef struct {
     MaWindow parent;
     Display *display;
@@ -36,6 +35,7 @@ typedef struct {
     GLXFBConfig fbc;
     Colormap cmap;
     GLXContext glxContext;
+    int mousex, mousey;
 } X11Window;
 
 #define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
@@ -74,6 +74,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
     window->parent.width = width;
     window->parent.height = height;
     window->parent.title = title;
+    window->parent.mouseMovedCallback = NULL;
 
     window->display = XOpenDisplay(NULL);
     if (window->display == NULL) {
@@ -137,7 +138,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     swa.background_pixmap = None ;
     swa.border_pixel      = 0;
-    swa.event_mask        = StructureNotifyMask;
+    swa.event_mask        = StructureNotifyMask | PointerMotionMask;
     window->xwindow = XCreateWindow( window->display, RootWindow( window->display, vi->screen ), 
                                      0, 0, width, height, 0, vi->depth, InputOutput, 
                                      vi->visual, 
@@ -221,6 +222,22 @@ bool maWindowPollEvents(MaWindow *window) {
             case ClientMessage:
                 if (event.xclient.data.l[0] == x11window->wmDeleteMessage) {
                     return false;
+                }
+                break;
+            case MotionNotify:
+                if (event.xmotion.x != x11window->mousex || event.xmotion.y != x11window->mousey) {
+                    x11window->mousex = event.xmotion.x;
+                    x11window->mousey = event.xmotion.y;
+                    if (window->mouseMovedCallback)
+                        window->mouseMovedCallback(event.xmotion.x, event.xmotion.y);
+                }
+                break;
+            case ConfigureNotify:
+                if (event.xconfigure.width != window->width || event.xconfigure.height != window->height) {
+                    window->width = event.xconfigure.width;
+                    window->height = event.xconfigure.height;
+                    if (window->resizeCallback)
+                        window->resizeCallback(event.xconfigure.width, event.xconfigure.height);
                 }
                 break;
         }
