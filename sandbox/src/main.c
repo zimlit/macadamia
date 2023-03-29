@@ -18,11 +18,19 @@
  */
 
 #include <ma-window/ma-window.h>
+#include <GL/gl.h>
+#include <stdio.h>
 
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
+    if (!window)
+        return 1;
+    if (!maWindowMakeGlContext(window))
+        return 1;
     while (maWindowPollEvents(window)) {
-        // Do stuff
+        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        maWindowSwapBuffers(window);
     }
     maWindowFree(window);
     return 0;

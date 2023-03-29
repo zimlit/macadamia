@@ -1,3 +1,3 @@
 add_executable(sandbox src/main.c)
 
-target_link_libraries(sandbox PRIVATE ma-window)
+target_link_libraries(sandbox PRIVATE ma-window GL)

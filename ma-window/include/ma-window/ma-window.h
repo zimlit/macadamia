@@ -28,6 +28,8 @@ typedef struct {
 
 MaWindow *maWindowNew(int width, int height, const char *title);
 void maWindowFree(MaWindow *window);
+bool maWindowMakeGlContext(MaWindow *window);
 bool maWindowPollEvents(MaWindow *window);
+void maWindowSwapBuffers(MaWindow *window);
 
 #endif
