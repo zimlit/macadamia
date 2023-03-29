@@ -26,3 +26,11 @@ void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y)
 void maWindowResizeCallback(MaWindow *window, void (*callback)(int width, int height)) {
     window->resizeCallback = callback;
 }
+
+void maWindowKeyPressedCallback(MaWindow *window, void (*callback)(int key)) {
+    window->keyPressedCallback = callback;
+}
+
+void maWindowKeyReleasedCallback(MaWindow *window, void (*callback)(int key)) {
+    window->keyReleasedCallback = callback;
+}

@@ -21,8 +21,8 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-void onWindowResize(int width, int height) {
-    printf("Window resized to %d x %d\n", width, height);
+void onkeypressed(int key) {
+    printf("%d\n", key);
 }
 
 int main() {
@@ -31,7 +31,7 @@ int main() {
         return 1;
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
-    maWindowResizeCallback(window, onWindowResize);
+    maWindowKeyPressedCallback(window, onkeypressed);
     while (maWindowPollEvents(window)) {
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
