@@ -30,26 +30,35 @@ this is a simple windowing library used by macademia.
 
     .. c:member:: int width
             
-            The width of the window.
+        The width of the window.
+
     .. c:member:: int height
             
-            The height of the window.
+        The height of the window.
 
     .. c:member:: const char *title
             
-            The title of the window.
+        The title of the window.
     
     .. c:member:: bool hasGlContext
             
-            Whether the window has a OpenGL context.
+        Whether the window has a OpenGL context.
     
     .. c:member:: void (*mouseMovedCallback)(int x, int y)
         
-            Is called in the event loop when the mouse is moved.
+        Is called by :c:func:`maWindowPollEvents` when the mouse is moved.
     
     .. c:member:: void (*resizeCallback)(int width, int height)
         
-            Is called in the event loop when the window is resized.
+        Is called by :c:func:`maWindowPollEvents` when the window is resized.
+    
+    .. c:member:: void (*keyPressedCallback)(int key)
+        
+        Is called by :c:func:`maWindowPollEvents` when a key is pressed.
+
+    .. c:member:: void (*KeyReleasedCallback)(int key)
+        
+        Is called by :c:func:`maWindowPollEvents` when a key is released.
 
 .. c:function:: MaWindow *maWindowNew(int width, int height, const char *title);
     
