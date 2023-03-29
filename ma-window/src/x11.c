@@ -35,6 +35,7 @@ typedef struct {
     Atom wmDeleteMessage;
     GLXFBConfig fbc;
     Colormap cmap;
+    GLXContext glxContext;
 } X11Window;
 
 #define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
@@ -163,7 +164,13 @@ void maWindowFree(MaWindow *window) {
     free(window);
 }
 
-bool maWindowMakeGlContext(MaWindow *w) {
+void maWindowFreeGlContext(MaWindow *window) {
+    X11Window *x11window = (X11Window *)window;
+    glXMakeCurrent(x11window->display, None, NULL);
+    glXDestroyContext(x11window->display, x11window->glxContext);
+}
+
+bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     X11Window *window = (X11Window *)w;
     const char *glxExts = glXQueryExtensionsString( window->display,
                                                     DefaultScreen( window->display ) );
@@ -174,7 +181,7 @@ bool maWindowMakeGlContext(MaWindow *w) {
     glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)
             glXGetProcAddressARB( (const GLubyte *) "glXCreateContextAttribsARB" );
 
-    GLXContext ctx = 0;
+    window->glxContext = 0;
     if ( !isExtensionSupported( glxExts, "GLX_ARB_create_context" ) ||
        !glXCreateContextAttribsARB ) {
         printf("cant find ext");
@@ -182,23 +189,23 @@ bool maWindowMakeGlContext(MaWindow *w) {
     }
 
     int context_attribs[] = {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+        GLX_CONTEXT_MAJOR_VERSION_ARB, 4,
         GLX_CONTEXT_MINOR_VERSION_ARB, 0,
         //GLX_CONTEXT_FLAGS_ARB        , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
         None
     };
 
-    ctx = glXCreateContextAttribsARB( window->display, window->fbc, 0,
+    window->glxContext = glXCreateContextAttribsARB( window->display, window->fbc, 0,
                                       True, context_attribs );
 
     XSync( window->display, False );
 
-    if ( !ctx ) {
+    if ( !window->glxContext ) {
         printf("Failed to create GL context");
         return false;
     }
 
-    glXMakeCurrent( window->display, window->xwindow, ctx );
+    glXMakeCurrent( window->display, window->xwindow, window->glxContext );
     XSync( window->display, False );
 
     return true;

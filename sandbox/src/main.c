@@ -25,13 +25,14 @@ int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)
         return 1;
-    if (!maWindowMakeGlContext(window))
+    if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
     while (maWindowPollEvents(window)) {
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         maWindowSwapBuffers(window);
     }
+    maWindowFreeGlContext(window);
     maWindowFree(window);
     return 0;
 }
