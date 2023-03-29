@@ -37,7 +37,6 @@ void maWindowSwapBuffers(MaWindow *window);
 void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y));
 void maWindowResizeCallback(MaWindow *window, void (*callback)(int width, int height));
 
-// OPENGL
 bool maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
 
 #endif
