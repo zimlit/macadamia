@@ -365,6 +365,10 @@ bool maWindowPollEvents(MaWindow *window) {
                 if (window->keyPressedCallback)
                     window->keyPressedCallback(keymap[XLookupKeysym(&event.xkey, 0)]);
                 break;
+            case KeyRelease:
+                if (window->keyReleasedCallback)
+                    window->keyReleasedCallback(keymap[XLookupKeysym(&event.xkey, 0)]);
+                break;
         }
     }
 
