@@ -24,6 +24,7 @@ typedef struct {
     int width;
     int height;
     const char *title;
+    bool hasGlContext;
 } MaWindow;
 
 MaWindow *maWindowNew(int width, int height, const char *title);
@@ -33,6 +34,5 @@ void maWindowSwapBuffers(MaWindow *window);
 
 // OPENGL
 bool maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
-void maWindowFreeGlContext(MaWindow *window);
 
 #endif

@@ -32,7 +32,6 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
         maWindowSwapBuffers(window);
     }
-    maWindowFreeGlContext(window);
     maWindowFree(window);
     return 0;
 }

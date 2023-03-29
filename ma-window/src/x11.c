@@ -70,6 +70,7 @@ bool isExtensionSupported(const char *extList, const char *extension) {
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
     X11Window *window = malloc(sizeof(X11Window));
+    window->parent.hasGlContext = false;
     window->parent.width = width;
     window->parent.height = height;
     window->parent.title = title;
@@ -158,16 +159,14 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
 void maWindowFree(MaWindow *window) {
     X11Window *x11window = (X11Window *)window;
+    if (window->hasGlContext) {
+        glXMakeCurrent(x11window->display, None, NULL);
+        glXDestroyContext(x11window->display, x11window->glxContext);
+    }
     XDestroyWindow(x11window->display, x11window->xwindow);
     XFreeColormap(x11window->display, x11window->cmap);
     XCloseDisplay(x11window->display);
     free(window);
-}
-
-void maWindowFreeGlContext(MaWindow *window) {
-    X11Window *x11window = (X11Window *)window;
-    glXMakeCurrent(x11window->display, None, NULL);
-    glXDestroyContext(x11window->display, x11window->glxContext);
 }
 
 bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
@@ -207,6 +206,8 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
 
     glXMakeCurrent( window->display, window->xwindow, window->glxContext );
     XSync( window->display, False );
+
+    window->parent.hasGlContext = true;
 
     return true;
 }
