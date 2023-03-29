@@ -75,6 +75,136 @@ this is a simple windowing library used by macademia.
         
     Sets the resize callback of the window.
 
+.. c:function:: void maWindowKeyPresedCallback(MaWindow *window, void (*callback)(int key));
+        
+    Sets the key pressed callback of the window.
+
+.. c:function:: void maWindowKeyReleasedCallback(MaWindow *window, void (*callback)(int key));
+            
+    Sets the key released callback of the window.
+
 .. c:function:: void maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
     
     Initializes an OpenGL context with the specified version.
+
+Keycodes
+--------
+
+.. c:macro:: MA_KEY_SPACE              
+.. c:macro:: MA_KEY_APOSTROPHE         
+.. c:macro:: MA_KEY_COMMA               
+.. c:macro:: MA_KEY_MINUS               
+.. c:macro:: MA_KEY_PERIOD              
+.. c:macro:: MA_KEY_SLASH               
+.. c:macro:: MA_KEY_0                  
+.. c:macro:: MA_KEY_1                  
+.. c:macro:: MA_KEY_2                  
+.. c:macro:: MA_KEY_3                  
+.. c:macro:: MA_KEY_4                  
+.. c:macro:: MA_KEY_5                  
+.. c:macro:: MA_KEY_6                  
+.. c:macro:: MA_KEY_7                  
+.. c:macro:: MA_KEY_8                  
+.. c:macro:: MA_KEY_9                  
+.. c:macro:: MA_KEY_SEMICOLON           
+.. c:macro:: MA_KEY_EQUAL               
+.. c:macro:: MA_KEY_A                  
+.. c:macro:: MA_KEY_B                  
+.. c:macro:: MA_KEY_C                  
+.. c:macro:: MA_KEY_D                  
+.. c:macro:: MA_KEY_E                  
+.. c:macro:: MA_KEY_F                  
+.. c:macro:: MA_KEY_G                  
+.. c:macro:: MA_KEY_H                  
+.. c:macro:: MA_KEY_I          
+.. c:macro:: MA_KEY_J                  
+.. c:macro:: MA_KEY_K                  
+.. c:macro:: MA_KEY_L                  
+.. c:macro:: MA_KEY_M                  
+.. c:macro:: MA_KEY_N                  
+.. c:macro:: MA_KEY_O                  
+.. c:macro:: MA_KEY_P                  
+.. c:macro:: MA_KEY_Q                  
+.. c:macro:: MA_KEY_R                  
+.. c:macro:: MA_KEY_S                  
+.. c:macro:: MA_KEY_T                  
+.. c:macro:: MA_KEY_U                  
+.. c:macro:: MA_KEY_V                  
+.. c:macro:: MA_KEY_W                  
+.. c:macro:: MA_KEY_X                  
+.. c:macro:: MA_KEY_Y                  
+.. c:macro:: MA_KEY_Z                  
+.. c:macro:: MA_KEY_LEFT_BRACKET       
+.. c:macro:: MA_KEY_BACKSLASH          
+.. c:macro:: MA_KEY_RIGHT_BRACKET      
+.. c:macro:: MA_KEY_GRAVE_ACCENT       
+.. c:macro:: MA_KEY_ESCAPE           
+.. c:macro:: MA_KEY_ENTER            
+.. c:macro:: MA_KEY_TAB              
+.. c:macro:: MA_KEY_BACKSPACE        
+.. c:macro:: MA_KEY_INSERT           
+.. c:macro:: MA_KEY_DELETE           
+.. c:macro:: MA_KEY_RIGHT            
+.. c:macro:: MA_KEY_LEFT             
+.. c:macro:: MA_KEY_DOWN             
+.. c:macro:: MA_KEY_UP               
+.. c:macro:: MA_KEY_PAGE_UP          
+.. c:macro:: MA_KEY_PAGE_DOWN        
+.. c:macro:: MA_KEY_HOME             
+.. c:macro:: MA_KEY_END              
+.. c:macro:: MA_KEY_CAPS_LOCK        
+.. c:macro:: MA_KEY_SCROLL_LOCK      
+.. c:macro:: MA_KEY_NUM_LOCK         
+.. c:macro:: MA_KEY_PRINT_SCREEN     
+.. c:macro:: MA_KEY_PAUSE            
+.. c:macro:: MA_KEY_F1               
+.. c:macro:: MA_KEY_F2               
+.. c:macro:: MA_KEY_F3               
+.. c:macro:: MA_KEY_F4               
+.. c:macro:: MA_KEY_F5               
+.. c:macro:: MA_KEY_F6               
+.. c:macro:: MA_KEY_F7               
+.. c:macro:: MA_KEY_F8               
+.. c:macro:: MA_KEY_F9               
+.. c:macro:: MA_KEY_F10              
+.. c:macro:: MA_KEY_F11              
+.. c:macro:: MA_KEY_F12              
+.. c:macro:: MA_KEY_F13              
+.. c:macro:: MA_KEY_F14              
+.. c:macro:: MA_KEY_F15              
+.. c:macro:: MA_KEY_F16              
+.. c:macro:: MA_KEY_F17              
+.. c:macro:: MA_KEY_F18              
+.. c:macro:: MA_KEY_F19              
+.. c:macro:: MA_KEY_F20              
+.. c:macro:: MA_KEY_F21              
+.. c:macro:: MA_KEY_F22              
+.. c:macro:: MA_KEY_F23              
+.. c:macro:: MA_KEY_F24              
+.. c:macro:: MA_KEY_F25              
+.. c:macro:: MA_KEY_KP_0             
+.. c:macro:: MA_KEY_KP_1             
+.. c:macro:: MA_KEY_KP_2             
+.. c:macro:: MA_KEY_KP_3             
+.. c:macro:: MA_KEY_KP_4             
+.. c:macro:: MA_KEY_KP_5             
+.. c:macro:: MA_KEY_KP_6             
+.. c:macro:: MA_KEY_KP_7             
+.. c:macro:: MA_KEY_KP_8             
+.. c:macro:: MA_KEY_KP_9             
+.. c:macro:: MA_KEY_KP_DECIMAL       
+.. c:macro:: MA_KEY_KP_DIVIDE        
+.. c:macro:: MA_KEY_KP_MULTIPLY      
+.. c:macro:: MA_KEY_KP_SUBTRACT      
+.. c:macro:: MA_KEY_KP_ADD           
+.. c:macro:: MA_KEY_KP_ENTER         
+.. c:macro:: MA_KEY_KP_EQUAL         
+.. c:macro:: MA_KEY_LEFT_SHIFT       
+.. c:macro:: MA_KEY_LEFT_CONTROL     
+.. c:macro:: MA_KEY_LEFT_ALT         
+.. c:macro:: MA_KEY_LEFT_SUPER       
+.. c:macro:: MA_KEY_RIGHT_SHIFT      
+.. c:macro:: MA_KEY_RIGHT_CONTROL    
+.. c:macro:: MA_KEY_RIGHT_ALT        
+.. c:macro:: MA_KEY_RIGHT_SUPER      
+.. c:macro:: MA_KEY_MENU             
