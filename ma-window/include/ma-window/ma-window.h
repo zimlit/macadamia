@@ -150,6 +150,20 @@
 
 #define MA_KEY_LAST               MA_KEY_MENU
 
+#define MA_MOUSE_BUTTON_1         0
+#define MA_MOUSE_BUTTON_2         1
+#define MA_MOUSE_BUTTON_3         2
+#define MA_MOUSE_BUTTON_4         3
+#define MA_MOUSE_BUTTON_5         4
+#define MA_MOUSE_BUTTON_6         5
+#define MA_MOUSE_BUTTON_7         6
+#define MA_MOUSE_BUTTON_8         7
+#define MA_MOUSE_BUTTON_9         8
+#define MA_MOUSE_BUTTON_LAST      MA_MOUSE_BUTTON_8
+#define MA_MOUSE_BUTTON_LEFT      MA_MOUSE_BUTTON_1
+#define MA_MOUSE_BUTTON_RIGHT     MA_MOUSE_BUTTON_2
+#define MA_MOUSE_BUTTON_MIDDLE    MA_MOUSE_BUTTON_3
+
 typedef struct {
     int width;
     int height;
@@ -159,6 +173,8 @@ typedef struct {
     void (*resizeCallback)(int width, int height);
     void (*keyPressedCallback)(int key);
     void (*keyReleasedCallback)(int key);
+    void (*mouseButtonPressedCallback)(int button);
+    void (*mouseButtonReleasedCallback)(int button);
 } MaWindow;
 
 MaWindow *maWindowNew(int width, int height, const char *title);
@@ -170,6 +186,8 @@ void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y)
 void maWindowResizeCallback(MaWindow *window, void (*callback)(int width, int height));
 void maWindowKeyPressedCallback(MaWindow *window, void (*callback)(int key));
 void maWindowKeyReleasedCallback(MaWindow *window, void (*callback)(int key));
+void maWindowMouseButtonPressedCallback(MaWindow *window, void (*callback)(int button));
+void maWindowMouseButtonReleasedCallback(MaWindow *window, void (*callback)(int button));
 
 bool maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
 

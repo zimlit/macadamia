@@ -146,6 +146,18 @@ static uint32_t keymap[] = {
     [XK_Menu] = MA_KEY_MENU,
 };
 
+static int mousemap[] = {
+    [1] = MA_MOUSE_BUTTON_LEFT,
+    [2] = MA_MOUSE_BUTTON_MIDDLE,
+    [3] = MA_MOUSE_BUTTON_RIGHT,
+    [4] = MA_MOUSE_BUTTON_4,
+    [5] = MA_MOUSE_BUTTON_5,
+    [6] = MA_MOUSE_BUTTON_6,
+    [7] = MA_MOUSE_BUTTON_7,
+    [8] = MA_MOUSE_BUTTON_8,
+    [9] = MA_MOUSE_BUTTON_9,
+};
+
 typedef GLXContext (*glXCreateContextAttribsARBProc)
     (Display*, GLXFBConfig, GLXContext, Bool, const int*);
 typedef struct {
@@ -259,7 +271,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     swa.background_pixmap = None ;
     swa.border_pixel      = 0;
-    swa.event_mask        = StructureNotifyMask | PointerMotionMask | KeyPressMask, KeyReleaseMask;
+    swa.event_mask        = StructureNotifyMask | PointerMotionMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask;
     window->xwindow = XCreateWindow( window->display, RootWindow( window->display, vi->screen ), 
                                      0, 0, width, height, 0, vi->depth, InputOutput, 
                                      vi->visual, 
@@ -368,6 +380,14 @@ bool maWindowPollEvents(MaWindow *window) {
             case KeyRelease:
                 if (window->keyReleasedCallback)
                     window->keyReleasedCallback(keymap[XLookupKeysym(&event.xkey, 0)]);
+                break;
+            case ButtonPress:
+                if (window->mouseButtonPressedCallback)
+                    window->mouseButtonPressedCallback(event.xbutton.button);
+                break;
+            case ButtonRelease:
+                if (window->mouseButtonReleasedCallback)
+                    window->mouseButtonReleasedCallback(event.xbutton.button);
                 break;
         }
     }

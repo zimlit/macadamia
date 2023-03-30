@@ -34,3 +34,11 @@ void maWindowKeyPressedCallback(MaWindow *window, void (*callback)(int key)) {
 void maWindowKeyReleasedCallback(MaWindow *window, void (*callback)(int key)) {
     window->keyReleasedCallback = callback;
 }
+
+void maWindowMouseButtonPressedCallback(MaWindow *window, void (*callback)(int button)) {
+    window->mouseButtonPressedCallback = callback;
+}
+
+void maWindowMouseButtonReleasedCallback(MaWindow *window, void (*callback)(int button)) {
+    window->mouseButtonReleasedCallback = callback;
+}

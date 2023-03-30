@@ -60,6 +60,14 @@ this is a simple windowing library used by macademia.
         
         Is called by :c:func:`maWindowPollEvents` when a key is released.
 
+    .. c:member:: void (*mouseButtonPressedCallback)(int button)
+            
+        Is called by :c:func:`maWindowPollEvents` when a mouse button is pressed.
+
+    .. c:member:: void (*mouseButtonReleasedCallback)(int button)
+            
+        Is called by :c:func:`maWindowPollEvents` when a mouse button is released.
+
 .. c:function:: MaWindow *maWindowNew(int width, int height, const char *title);
     
     Initializes a new window. Returns NULL on failure
@@ -91,6 +99,14 @@ this is a simple windowing library used by macademia.
 .. c:function:: void maWindowKeyReleasedCallback(MaWindow *window, void (*callback)(int key));
             
     Sets the key released callback of the window.
+
+.. c:function:: void maWindowMouseButtonPressedCallback(MaWindow *window, void (*callback)(int button));
+                
+    Sets the mouse button pressed callback of the window.
+
+.. c:function:: void maWindowMouseButtonReleasedCallback(MaWindow *window, void (*callback)(int button));
+                    
+    Sets the mouse button released callback of the window.
 
 .. c:function:: void maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
     
@@ -217,3 +233,34 @@ Keycodes
 .. c:macro:: MA_KEY_RIGHT_ALT        
 .. c:macro:: MA_KEY_RIGHT_SUPER      
 .. c:macro:: MA_KEY_MENU             
+
+Mouse Codes
+-----------
+
+These macros are used to identify mouse buttons. Note that scrolling is considered a button by this library.
+
+.. c:macro:: MA_MOUSE_BUTTON_1
+.. c:macro:: MA_MOUSE_BUTTON_2
+.. c:macro:: MA_MOUSE_BUTTON_3
+.. c:macro:: MA_MOUSE_BUTTON_4
+
+    Scroll up
+
+.. c:macro:: MA_MOUSE_BUTTON_5
+
+    Scroll down
+
+.. c:macro:: MA_MOUSE_BUTTON_6
+
+    Scroll left
+
+.. c:macro:: MA_MOUSE_BUTTON_7
+    
+    Scroll right
+
+.. c:macro:: MA_MOUSE_BUTTON_8
+.. c:macro:: MA_MOUSE_BUTTON_9
+.. c:macro:: MA_MOUSE_BUTTON_LAST  
+.. c:macro:: MA_MOUSE_BUTTON_LEFT  
+.. c:macro:: MA_MOUSE_BUTTON_RIGHT 
+.. c:macro:: MA_MOUSE_BUTTON_MIDDLE
