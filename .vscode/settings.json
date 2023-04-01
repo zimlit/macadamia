@@ -2,6 +2,7 @@
     "files.associations": {
         "camera": "c",
         "graphicscontext": "c",
-        "viewport": "c"
+        "viewport": "c",
+        "ma-window.h": "c"
     }
 }

@@ -9,3 +9,7 @@ if (X11_FOUND)
     target_sources(ma-window PRIVATE src/x11.c)
     target_link_libraries(ma-window PUBLIC X11::X11)
 endif()
+
+if (WIN32)
+    target_sources(ma-window PRIVATE src/win32.c)
+endif()
