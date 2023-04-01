@@ -208,6 +208,12 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
     window->parent.height = height;
     window->parent.title = title;
     window->parent.mouseMovedCallback = NULL;
+    window->parent.resizeCallback = NULL;
+    window->parent.keyPressedCallback = NULL;
+    window->parent.keyReleasedCallback = NULL;
+    window->parent.mouseButtonPressedCallback = NULL;
+    window->parent.mouseButtonReleasedCallback = NULL;
+    maWindowsInit(&window->parent.children);
 
     window->display = XOpenDisplay(NULL);
     if (window->display == NULL) {
@@ -300,7 +306,9 @@ void maWindowFree(MaWindow *window) {
     XDestroyWindow(x11window->display, x11window->xwindow);
     XFreeColormap(x11window->display, x11window->cmap);
     XCloseDisplay(x11window->display);
+    maWindowsFree(&window->children);
     free(window);
+    window = NULL;
 }
 
 bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
@@ -392,10 +400,39 @@ bool maWindowPollEvents(MaWindow *window) {
         }
     }
 
+    for (int i = 0; i < window->children.len; i++) {
+        if (window->children.data[i] == NULL)
+            continue;
+        if (!maWindowPollEvents(window->children.data[i])) {
+            maWindowsRemove(&window->children, i);
+        }
+    }
+
     return true;
 }
 
 void maWindowSwapBuffers(MaWindow *window) {
+    if (window == NULL)
+        return;
     X11Window *x11window = (X11Window *)window;
     glXSwapBuffers(x11window->display, x11window->xwindow);
+}
+
+
+int maWindowAddChild(MaWindow *window, int width, int height, const char *title) {
+    maWindowsPush(&window->children, maWindowNew(width, height, title));
+    return window->children.len - 1;
+}
+
+MaWindow *maWindowGetChild(MaWindow *window, int child_id) {
+    if (child_id >= window->children.len)
+        return NULL;
+    return window->children.data[child_id];
+}
+
+void maWindowMakeGlContextCurrent(MaWindow *window) {
+    if (window == NULL || !window->hasGlContext)
+        return;
+    X11Window *x11window = (X11Window *)window;
+    glXMakeCurrent(x11window->display, x11window->xwindow, x11window->glxContext);
 }

@@ -18,6 +18,7 @@
  */
 
 #include <ma-window/ma-window.h>
+#include <stdlib.h>
 
 void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y)) {
     window->mouseMovedCallback = callback;
@@ -41,4 +42,32 @@ void maWindowMouseButtonPressedCallback(MaWindow *window, void (*callback)(int b
 
 void maWindowMouseButtonReleasedCallback(MaWindow *window, void (*callback)(int button)) {
     window->mouseButtonReleasedCallback = callback;
+}
+
+void maWindowsInit(MaWindows *windows) {
+    windows->cap = 0;
+    windows->len = 0;
+    windows->data = NULL;
+}
+
+void maWindowsFree(MaWindows *windows) {
+    free(windows->data);
+    maWindowsInit(windows);
+}
+
+void maWindowsPush(MaWindows *windows, MaWindow *window) {
+    if (windows->len+1 > windows->cap) {
+        windows->cap = windows->cap < 8 ? 8 : windows->cap * 2;
+        windows->data = realloc(windows->data, windows->cap);
+    }
+
+    windows->data[windows->len] = window;
+    windows->len++;
+}
+
+void maWindowsRemove(MaWindows *windows, int idx) {
+    if (idx >= windows->len)
+        return;
+    maWindowFree(windows->data[idx]);
+    windows->data[idx] = NULL;
 }

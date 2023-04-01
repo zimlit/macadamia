@@ -31,11 +31,18 @@ int main() {
         return 1;
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
+    int child = maWindowAddChild(window, 320, 240, "Child");
+    maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
     maWindowMouseButtonPressedCallback(window, onbuttonpressed);
     while (maWindowPollEvents(window)) {
+        maWindowMakeGlContextCurrent(window);
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         maWindowSwapBuffers(window);
+        maWindowMakeGlContextCurrent(maWindowGetChild(window, child));
+        glClearColor(0.0f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        maWindowSwapBuffers(maWindowGetChild(window, child));
     }
     maWindowFree(window);
     return 0;

@@ -164,11 +164,24 @@
 #define MA_MOUSE_BUTTON_RIGHT     MA_MOUSE_BUTTON_2
 #define MA_MOUSE_BUTTON_MIDDLE    MA_MOUSE_BUTTON_3
 
-typedef struct {
+
+typedef struct MaWindow MaWindow;
+typedef struct MaWindows {
+    int len;
+    int cap;
+    MaWindow **data;
+} MaWindows;
+
+void maWindowsInit(MaWindows *windows);
+void maWindowsFree(MaWindows *windows);
+void maWindowsPush(MaWindows *windows, MaWindow *window);
+void maWindowsRemove(MaWindows *windows, int idx);
+typedef struct MaWindow {
     int width;
     int height;
     const char *title;
     bool hasGlContext;
+    MaWindows children;
     void (*mouseMovedCallback)(int x, int y);
     void (*resizeCallback)(int width, int height);
     void (*keyPressedCallback)(int key);
@@ -181,6 +194,9 @@ MaWindow *maWindowNew(int width, int height, const char *title);
 void maWindowFree(MaWindow *window);
 bool maWindowPollEvents(MaWindow *window);
 void maWindowSwapBuffers(MaWindow *window);
+int maWindowAddChild(MaWindow *window, int width, int height, const char *title);
+void maWindowMakeGlContextCurrent(MaWindow *window);
+MaWindow *maWindowGetChild(MaWindow *window, int child_id);
 
 void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y));
 void maWindowResizeCallback(MaWindow *window, void (*callback)(int width, int height));
