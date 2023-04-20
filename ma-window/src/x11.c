@@ -283,6 +283,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
                                      vi->visual, 
                                      CWBorderPixel|CWColormap|CWEventMask, &swa );
     if (!window->xwindow) {
+        free(window);
         return NULL;
     }
 
