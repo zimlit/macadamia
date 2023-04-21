@@ -7,3 +7,7 @@ target_link_libraries(sandbox PRIVATE ma-window ${OPENGL_gl_LIBRARY})
 if(WIN32)
     target_compile_definitions(sandbox PRIVATE WIN32)
 endif()
+
+if (LINUX)
+    target_link_libraries(sandbox PRIVATE GL)
+endif()

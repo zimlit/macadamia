@@ -9,6 +9,7 @@ if (X11_FOUND)
     target_sources(ma-window PRIVATE src/x11.c)
     target_sources(ma-window PRIVATE vendor/glad/src/gl.c vendor/glad/src/glx.c vendor/glad/include/glad/gl.h vendor/glad/include/glad/glx.h)
     target_link_libraries(ma-window PUBLIC X11::X11)
+    target_link_libraries(ma-window PUBLIC GL)
 endif()
 
 if (WIN32)

@@ -20,8 +20,8 @@
 #include <ma-window/ma-window.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
+#include <glad/gl.h>
 #include <GL/glx.h>
-#include <GL/gl.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -203,9 +203,6 @@ bool isExtensionSupported(const char *extList, const char *extension) {
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
     X11Window *window = malloc(sizeof(X11Window));
-    if (!window) {
-        return NULL;
-    }
     window->parent.hasGlContext = false;
     window->parent.width = width;
     window->parent.height = height;
@@ -251,9 +248,10 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     int fbcount = 0;
     GLXFBConfig *fbc = glXChooseFBConfig(window->display, DefaultScreen(window->display), visual_attribs, &fbcount);
-    if (!fbc)
+    if (!fbc) {
         free(window);
         return NULL;
+    }
 
     int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
@@ -348,7 +346,6 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     XSync( window->display, False );
 
     if ( !window->glxContext ) {
-        printf("Failed to create GL context");
         return false;
     }
 
@@ -356,6 +353,12 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     XSync( window->display, False );
 
     window->parent.hasGlContext = true;
+
+
+    int gl_version = gladLoadGL((GLADloadfunc)glXGetProcAddressARB);
+    if (!gl_version) {
+        return false;
+    }
 
     return true;
 }

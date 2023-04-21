@@ -253,6 +253,12 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
 
     window->rc = RC;
     pwindow->hasGlContext = true;
+
+    int gl_version = gladLoadGL((GLADloadfunc)wglGetProcAddress);
+    if (!gl_version) {
+        return false;
+    }
+
     return true;
 }
 
