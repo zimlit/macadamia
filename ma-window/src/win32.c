@@ -24,6 +24,11 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         case WM_DESTROY:
             w->shoud_close = true;
             return 0;
+        case WM_MOUSEMOVE:
+            if (w->parent.mouseMovedCallback) {
+                w->parent.mouseMovedCallback(LOWORD(lParam), HIWORD(lParam));
+            }
+            return 0;
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -102,7 +107,7 @@ bool maWindowPollEvents(MaWindow *window) {
     Win32Window *win32_window = (Win32Window *)window;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        DispatchMessageW(&msg);
         if (win32_window->shoud_close)
             return false;
         for (int i = 0; i < window->children.len; i++) {

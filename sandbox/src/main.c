@@ -24,8 +24,8 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-void onbuttonpressed(int bt) {
-    printf("%d\n", bt);
+void onMouseMoved(int x, int y) {
+    printf("Mouse moved to (%d, %d)\n", x, y);
 }
 
 int main() {
@@ -36,7 +36,8 @@ int main() {
         return 1;
     int child = maWindowAddChild(window, 320, 240, "Child");
     maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
-    maWindowMouseButtonPressedCallback(window, onbuttonpressed);
+    maWindowMouseMovedCallback(window, onMouseMoved);
+    maWindowMouseMovedCallback(maWindowGetChild(window, child), onMouseMoved);
     while (maWindowPollEvents(window)) {
         maWindowMakeGlContextCurrent(window);
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
