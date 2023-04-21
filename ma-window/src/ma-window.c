@@ -51,10 +51,6 @@ void maWindowsInit(MaWindows *windows) {
 }
 
 void maWindowsFree(MaWindows *windows) {
-    for (int i = 0; i < windows->len; i++) {
-        if (windows->data[i] != NULL)
-            maWindowFree(windows->data[i]);
-    }
     free(windows->data);
     maWindowsInit(windows);
 }
@@ -74,15 +70,4 @@ void maWindowsRemove(MaWindows *windows, int idx) {
         return;
     maWindowFree(windows->data[idx]);
     windows->data[idx] = NULL;
-}
-
-int maWindowAddChild(MaWindow *window, int width, int height, const char *title) {
-    maWindowsPush(&window->children, maWindowNew(width, height, title));
-    return window->children.len - 1;
-}
-
-MaWindow *maWindowGetChild(MaWindow *window, int child_id) {
-    if (child_id >= window->children.len)
-        return NULL;
-    return window->children.data[child_id];
 }

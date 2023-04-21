@@ -18,9 +18,6 @@
  */
 
 #include <ma-window/ma-window.h>
-#ifdef WIN32
-    #include <windows.h>
-#endif
 #include <GL/gl.h>
 #include <stdio.h>
 
