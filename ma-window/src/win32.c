@@ -59,7 +59,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
         0,                              // Optional window styles.
         CLASS_NAME,                     // Window class
         window->title_w,    // Window text
-        WS_OVERLAPPEDWINDOW,            // Window style
+        WS_OVERLAPPEDWINDOW | CS_OWNDC,            // Window style
 
         // Size and position
         CW_USEDEFAULT, CW_USEDEFAULT, width, height,
