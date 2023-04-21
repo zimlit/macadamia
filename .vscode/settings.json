@@ -3,6 +3,8 @@
         "camera": "c",
         "graphicscontext": "c",
         "viewport": "c",
-        "ma-window.h": "c"
+        "ma-window.h": "c",
+        "wgl.h": "c",
+        "stdlib.h": "c"
     }
 }
