@@ -203,6 +203,9 @@ bool isExtensionSupported(const char *extList, const char *extension) {
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
     X11Window *window = malloc(sizeof(X11Window));
+    if (!window) {
+        return NULL;
+    }
     window->parent.hasGlContext = false;
     window->parent.width = width;
     window->parent.height = height;
@@ -242,12 +245,14 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     if ( !glXQueryVersion(window->display, &glx_major, &glx_minor ) || 
        ( ( glx_major == 1 ) && ( glx_minor < 3 ) ) || ( glx_major < 1 ) ){
+        free(window);
         return NULL;
     }
 
     int fbcount = 0;
     GLXFBConfig *fbc = glXChooseFBConfig(window->display, DefaultScreen(window->display), visual_attribs, &fbcount);
     if (!fbc)
+        free(window);
         return NULL;
 
     int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
@@ -417,18 +422,6 @@ void maWindowSwapBuffers(MaWindow *window) {
         return;
     X11Window *x11window = (X11Window *)window;
     glXSwapBuffers(x11window->display, x11window->xwindow);
-}
-
-
-int maWindowAddChild(MaWindow *window, int width, int height, const char *title) {
-    maWindowsPush(&window->children, maWindowNew(width, height, title));
-    return window->children.len - 1;
-}
-
-MaWindow *maWindowGetChild(MaWindow *window, int child_id) {
-    if (child_id >= window->children.len)
-        return NULL;
-    return window->children.data[child_id];
 }
 
 void maWindowMakeGlContextCurrent(MaWindow *window) {
