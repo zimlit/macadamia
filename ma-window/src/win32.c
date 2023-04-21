@@ -14,6 +14,8 @@ typedef struct {
     wchar_t *title_w;
     bool shoud_close;
     HINSTANCE hInstance;
+    HDC hdc;
+    HGLRC rc;
 } Win32Window;
 
 LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -86,8 +88,11 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 }
 
 void maWindowFree(MaWindow *window) {
-    Win32Window *win32_window = (Win32Window *)window;\
+    Win32Window *win32_window = (Win32Window *)window;
+    DestroyWindow(win32_window->hwnd);
     free(win32_window->title_w);
+    ReleaseDC(win32_window->hwnd, win32_window->hdc);
+    wglDeleteContext(win32_window->rc);
     maWindowsFree(&win32_window->parent.children);
     free(win32_window);
 }
@@ -103,22 +108,36 @@ bool maWindowPollEvents(MaWindow *window) {
         for (int i = 0; i < window->children.len; i++) {
             if (window->children.data[i] == NULL)
                 continue;
-            if (((Win32Window *)window->children.data[i])->shoud_close)
+            if (!maWindowPollEvents(window->children.data[i])) {
                 maWindowsRemove(&window->children, i);
+            }
         }
     }
     return true;
 }
 
 void maWindowMakeGlContextCurrent(MaWindow *window) {
+    if (window == NULL || !window->hasGlContext)
+        return;
+    wglMakeCurrent(((Win32Window *)window)->hdc, ((Win32Window *)window)->rc);
 }
 
 bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     Win32Window *window = (Win32Window *)pwindow;
     HDC DC = GetDC(window->hwnd);
+    window->hdc = DC;
+    
+    const wchar_t CLASS_NAME[] = L"fake-ma-window";
+    WNDCLASSW wc = {0};
+    wc.lpfnWndProc = DefWindowProcW;
+    wc.hInstance = window->hInstance;
+    wc.lpszClassName = CLASS_NAME;
+    wc.cbWndExtra = sizeof(Win32Window *);
+
+    RegisterClassW(&wc);
 
     HWND fakeWND = CreateWindow(
-        "Core", "Fake Window",      // window class, title
+        "fake-ma-window", "Fake Window",      // window class, title
         WS_CLIPSIBLINGS | WS_CLIPCHILDREN, // style
         0, 0,                       // position x, y
         1, 1,                       // width, height
@@ -126,8 +145,11 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         window->hInstance, NULL);           // instance, param
     if (!fakeWND) {
         free(window);
+        char msg[256];
+        MessageBoxA(NULL, itoa(GetLastError(), msg, 10), "fakewnd Error", MB_OK | MB_ICONEXCLAMATION);
         return false;
     }
+
 
     HDC fakeDC = GetDC(fakeWND);
     PIXELFORMATDESCRIPTOR fakePFD;
@@ -139,6 +161,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     fakePFD.cColorBits = 32;
     fakePFD.cAlphaBits = 8;
     fakePFD.cDepthBits = 24;
+
     
     int fakePFDID = ChoosePixelFormat(fakeDC, &fakePFD);
     if (fakePFDID == 0) {
@@ -146,11 +169,13 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         free(window);
         return false;
     }
+
     if (!SetPixelFormat(fakeDC, fakePFDID, &fakePFD)) {
         DestroyWindow(fakeWND);
         free(window);
         return false;
     }
+
     HGLRC fakeRC = wglCreateContext(fakeDC);
     if (!fakeRC) {
         DestroyWindow(fakeWND);
@@ -208,6 +233,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         return false;
     }
 
+
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(fakeRC);
     ReleaseDC(fakeWND, fakeDC);
@@ -219,8 +245,12 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         maWindowFree(pwindow);
         return false;
     }
+
+    window->rc = RC;
+    pwindow->hasGlContext = true;
     return true;
 }
 
 void maWindowSwapBuffers(MaWindow *window) {
+    wglSwapLayerBuffers(((Win32Window *)window)->hdc, WGL_SWAP_MAIN_PLANE);
 }

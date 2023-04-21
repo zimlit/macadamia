@@ -35,7 +35,7 @@ int main() {
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
     int child = maWindowAddChild(window, 320, 240, "Child");
-    // maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
+    maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
     maWindowMouseButtonPressedCallback(window, onbuttonpressed);
     while (maWindowPollEvents(window)) {
         maWindowMakeGlContextCurrent(window);
