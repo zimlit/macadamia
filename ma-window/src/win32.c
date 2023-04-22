@@ -29,6 +29,11 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 w->parent.mouseMovedCallback(LOWORD(lParam), HIWORD(lParam));
             }
             return 0;
+        case WM_SIZE:
+            if (w->parent.resizeCallback) {
+                w->parent.resizeCallback(LOWORD(lParam), HIWORD(lParam));
+            }
+            return 0;
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

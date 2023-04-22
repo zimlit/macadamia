@@ -24,8 +24,8 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-void onMouseMoved(int x, int y) {
-    printf("Mouse moved to (%d, %d)\n", x, y);
+void onWindowResize(int width, int height) {
+    printf("Window resized to %d x %d\n", width, height);
 }
 
 int main() {
@@ -36,8 +36,7 @@ int main() {
         return 1;
     int child = maWindowAddChild(window, 320, 240, "Child");
     maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
-    maWindowMouseMovedCallback(window, onMouseMoved);
-    maWindowMouseMovedCallback(maWindowGetChild(window, child), onMouseMoved);
+    maWindowResizeCallback(window, onWindowResize);
     while (maWindowPollEvents(window)) {
         maWindowMakeGlContextCurrent(window);
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
