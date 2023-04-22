@@ -87,6 +87,8 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
         return NULL;
     }
 
+    window->hdc = GetDC(window->hwnd);
+
     ShowWindow(window->hwnd, SW_SHOWDEFAULT);
 
     return (MaWindow *)window;
@@ -129,8 +131,6 @@ void maWindowMakeGlContextCurrent(MaWindow *window) {
 
 bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     Win32Window *window = (Win32Window *)pwindow;
-    HDC DC = GetDC(window->hwnd);
-    window->hdc = DC;
     
     const wchar_t CLASS_NAME[] = L"fake-ma-window";
     WNDCLASSW wc = {0};
@@ -212,7 +212,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     };
     
     int pixelFormatID; UINT numFormats;
-    bool status = wglChoosePixelFormatARB(DC, pixelAttribs, NULL, 1, &pixelFormatID, &numFormats);
+    bool status = wglChoosePixelFormatARB(window->hdc, pixelAttribs, NULL, 1, &pixelFormatID, &numFormats);
     
     if (!status || numFormats == 0) {
         DestroyWindow(window->hwnd);
@@ -221,8 +221,8 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     }
 
     PIXELFORMATDESCRIPTOR PFD;
-    DescribePixelFormat(DC, pixelFormatID, sizeof(PFD), &PFD);
-    SetPixelFormat(DC, pixelFormatID, &PFD);
+    DescribePixelFormat(window->hdc, pixelFormatID, sizeof(PFD), &PFD);
+    SetPixelFormat(window->hdc, pixelFormatID, &PFD);
 
     int  contextAttribs[] = {
         WGL_CONTEXT_MAJOR_VERSION_ARB, major,
@@ -231,7 +231,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         0
     };
     
-    HGLRC RC = wglCreateContextAttribsARB(DC, 0, contextAttribs);
+    HGLRC RC = wglCreateContextAttribsARB(window->hdc, 0, contextAttribs);
     if (RC == NULL) {
         DestroyWindow(window->hwnd);
         maWindowFree(pwindow);
@@ -244,7 +244,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     ReleaseDC(fakeWND, fakeDC);
     DestroyWindow(fakeWND);
 
-    if (!wglMakeCurrent(DC, RC)) {
+    if (!wglMakeCurrent(window->hdc, RC)) {
         wglDeleteContext(RC);
         DestroyWindow(window->hwnd);
         maWindowFree(pwindow);
@@ -263,5 +263,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
 }
 
 void maWindowSwapBuffers(MaWindow *window) {
+    if (window == NULL)
+        return;
     wglSwapLayerBuffers(((Win32Window *)window)->hdc, WGL_SWAP_MAIN_PLANE);
 }
