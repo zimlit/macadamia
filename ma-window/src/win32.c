@@ -194,7 +194,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
         return false;
     }
 
-    gladLoadWGL(fakeDC, (GLADloadfunc)wglGetProcAddress);
+    gladLoaderLoadWGL(fakeDC);
 
     const int pixelAttribs[] = {
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
@@ -254,7 +254,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     window->rc = RC;
     pwindow->hasGlContext = true;
 
-    int gl_version = gladLoadGL((GLADloadfunc)wglGetProcAddress);
+    int gl_version = gladLoaderLoadGL();
     if (!gl_version) {
         return false;
     }
