@@ -355,7 +355,7 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     window->parent.hasGlContext = true;
 
 
-    int gl_version = gladLoadGL((GLADloadfunc)glXGetProcAddressARB);
+    int gl_version = gladLoaderLoadGL();
     if (!gl_version) {
         return false;
     }
