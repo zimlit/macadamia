@@ -28,12 +28,17 @@ void onWindowResize(int width, int height) {
     printf("Window resized to %d x %d\n", width, height);
 }
 
+void onWindowKeyPressed(int key) {
+    printf("Key pressed: %d\n", key);
+}
+
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)
         return 1;
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
+    maWindowKeyPressedCallback(window, onWindowKeyPressed);
     int child = maWindowAddChild(window, 320, 240, "Child");
     maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
     maWindowResizeCallback(window, onWindowResize);

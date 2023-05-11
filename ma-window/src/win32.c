@@ -3,10 +3,133 @@
 #include <stdlib.h>
 #include <glad/wgl.h>
 #include <glad/gl.h>
+#include <stdint.h>
 
 #ifndef UNICODE
 #define UNICODE
 #endif
+
+static uint32_t keymap[] = {
+    [VK_SPACE] = MA_KEY_SPACE,
+    [VK_OEM_7] = MA_KEY_APOSTROPHE,
+    [VK_OEM_COMMA] = MA_KEY_COMMA,
+    [VK_OEM_MINUS] = MA_KEY_MINUS,
+    [VK_OEM_PERIOD] = MA_KEY_PERIOD,
+    [VK_OEM_2] = MA_KEY_SLASH,
+    ['0'] = MA_KEY_0,
+    ['1'] = MA_KEY_1,
+    ['2'] = MA_KEY_2,
+    ['3'] = MA_KEY_3,
+    ['4'] = MA_KEY_4,
+    ['5'] = MA_KEY_5,
+    ['6'] = MA_KEY_6,
+    ['7'] = MA_KEY_7,
+    ['8'] = MA_KEY_8,
+    ['9'] = MA_KEY_9,
+    [VK_OEM_1] = MA_KEY_SEMICOLON,
+    [VK_OEM_PLUS] = MA_KEY_EQUAL,
+    ['A'] = MA_KEY_A,
+    ['B'] = MA_KEY_B,
+    ['C'] = MA_KEY_C,
+    ['D'] = MA_KEY_D,
+    ['E'] = MA_KEY_E,
+    ['F'] = MA_KEY_F,
+    ['G'] = MA_KEY_G,
+    ['H'] = MA_KEY_H,
+    ['I'] = MA_KEY_I,
+    ['J'] = MA_KEY_J,
+    ['K'] = MA_KEY_K,
+    ['L'] = MA_KEY_L,
+    ['M'] = MA_KEY_M,
+    ['N'] = MA_KEY_N,
+    ['O'] = MA_KEY_O,
+    ['P'] = MA_KEY_P,
+    ['Q'] = MA_KEY_Q,
+    ['R'] = MA_KEY_R,
+    ['S'] = MA_KEY_S,
+    ['T'] = MA_KEY_T,
+    ['U'] = MA_KEY_U,
+    ['V'] = MA_KEY_V,
+    ['W'] = MA_KEY_W,
+    ['X'] = MA_KEY_X,
+    ['Y'] = MA_KEY_Y,
+    ['Z'] = MA_KEY_Z,
+    [VK_OEM_4] = MA_KEY_LEFT_BRACKET,
+    [VK_OEM_5] = MA_KEY_BACKSLASH,
+    [VK_OEM_6] = MA_KEY_RIGHT_BRACKET,
+    [VK_OEM_3] = MA_KEY_GRAVE_ACCENT,
+    [VK_ESCAPE] = MA_KEY_ESCAPE,
+    [VK_RETURN] = MA_KEY_ENTER,
+    [VK_TAB] = MA_KEY_TAB,
+    [VK_BACK] = MA_KEY_BACKSPACE,
+    [VK_INSERT] = MA_KEY_INSERT,
+    [VK_DELETE] = MA_KEY_DELETE,
+    [VK_RIGHT] = MA_KEY_RIGHT,
+    [VK_LEFT] = MA_KEY_LEFT,
+    [VK_DOWN] = MA_KEY_DOWN,
+    [VK_UP] = MA_KEY_UP,
+    [VK_PRIOR] = MA_KEY_PAGE_UP,
+    [VK_NEXT] = MA_KEY_PAGE_DOWN,
+    [VK_HOME] = MA_KEY_HOME,
+    [VK_END] = MA_KEY_END,
+    [VK_CAPITAL] = MA_KEY_CAPS_LOCK,
+    [VK_SCROLL] = MA_KEY_SCROLL_LOCK,
+    [VK_NUMLOCK] = MA_KEY_NUM_LOCK,
+    [VK_PRINT] = MA_KEY_PRINT_SCREEN,
+    [VK_MEDIA_PLAY_PAUSE] = MA_KEY_PAUSE,
+    [VK_F1] = MA_KEY_F1,
+    [VK_F2] = MA_KEY_F2,
+    [VK_F3] = MA_KEY_F3,
+    [VK_F4] = MA_KEY_F4,
+    [VK_F5] = MA_KEY_F5,
+    [VK_F6] = MA_KEY_F6,
+    [VK_F7] = MA_KEY_F7,
+    [VK_F8] = MA_KEY_F8,
+    [VK_F9] = MA_KEY_F9,
+    [VK_F10] = MA_KEY_F10,
+    [VK_F11] = MA_KEY_F11,
+    [VK_F12] = MA_KEY_F12,
+    [VK_F13] = MA_KEY_F13,
+    [VK_F14] = MA_KEY_F14,
+    [VK_F15] = MA_KEY_F15,
+    [VK_F16] = MA_KEY_F16,
+    [VK_F17] = MA_KEY_F17,
+    [VK_F18] = MA_KEY_F18,
+    [VK_F19] = MA_KEY_F19,
+    [VK_F20] = MA_KEY_F20,
+    [VK_F21] = MA_KEY_F21,
+    [VK_F22] = MA_KEY_F22,
+    [VK_F23] = MA_KEY_F23,
+    [VK_F24] = MA_KEY_F24,
+    [0] = MA_KEY_F25,
+    [VK_NUMPAD0] = MA_KEY_KP_0,
+    [VK_NUMPAD1] = MA_KEY_KP_1,
+    [VK_NUMPAD2] = MA_KEY_KP_2,
+    [VK_NUMPAD3] = MA_KEY_KP_3,
+    [VK_NUMPAD4] = MA_KEY_KP_4,
+    [VK_NUMPAD5] = MA_KEY_KP_5,
+    [VK_NUMPAD6] = MA_KEY_KP_6,
+    [VK_NUMPAD7] = MA_KEY_KP_7,
+    [VK_NUMPAD8] = MA_KEY_KP_8,
+    [VK_NUMPAD9] = MA_KEY_KP_9,
+    [VK_DECIMAL] = MA_KEY_KP_DECIMAL,
+    [VK_DIVIDE] = MA_KEY_KP_DIVIDE,
+    [VK_MULTIPLY] = MA_KEY_KP_MULTIPLY,
+    [VK_SUBTRACT] = MA_KEY_KP_SUBTRACT,
+    [VK_ADD] = MA_KEY_KP_ADD,
+    [VK_RETURN] = MA_KEY_KP_ENTER,
+    [VK_OEM_PLUS] = MA_KEY_KP_EQUAL,
+    [VK_SHIFT] = MA_KEY_LEFT_SHIFT,
+    [VK_CONTROL] = MA_KEY_LEFT_CONTROL,
+    [VK_LMENU] = MA_KEY_LEFT_ALT,
+    [VK_LWIN] = MA_KEY_LEFT_SUPER,
+    [VK_SHIFT] = MA_KEY_RIGHT_SHIFT,
+    [VK_CONTROL] = MA_KEY_RIGHT_CONTROL,
+    [VK_RMENU] = MA_KEY_RIGHT_ALT,
+    [VK_RWIN] = MA_KEY_RIGHT_SUPER,
+    [VK_MENU] = MA_KEY_MENU,
+    [VK_OEM_102] = MA_KEY_UNKNOWN,
+};
 
 typedef struct {
     MaWindow parent;
@@ -32,6 +155,17 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         case WM_SIZE:
             if (w->parent.resizeCallback) {
                 w->parent.resizeCallback(LOWORD(lParam), HIWORD(lParam));
+            }
+            return 0;
+        case WM_KEYDOWN:
+            if (w->parent.keyPressedCallback) {
+                w->parent.keyPressedCallback(keymap[wParam]);
+                // printf("key down %d\n", wParam);
+            }
+            return 0;
+        case WM_KEYUP:
+            if (w->parent.keyReleasedCallback) {
+                w->parent.keyReleasedCallback(keymap[wParam]);
             }
             return 0;
     }
