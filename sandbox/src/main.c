@@ -21,10 +21,9 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-void onbuttonpressed(int bt) {
-    printf("%d\n", bt);
+void onMouse(int btn) {
+    printf("Mouse %d\n", btn);
 }
-
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)
@@ -33,7 +32,8 @@ int main() {
         return 1;
     int child = maWindowAddChild(window, 320, 240, "Child");
     maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
-    maWindowMouseButtonPressedCallback(window, onbuttonpressed);
+    maWindowMouseButtonPressedCallback(window, onMouse);
+    maWindowMouseButtonReleasedCallback(window, onMouse);
     while (maWindowPollEvents(window)) {
         maWindowMakeGlContextCurrent(window);
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
