@@ -196,7 +196,6 @@ void maWindowFree(MaWindow *window);
 bool maWindowPollEvents(MaWindow *window);
 void maWindowSwapBuffers(MaWindow *window);
 int maWindowAddChild(MaWindow *window, int width, int height, const char *title);
-void maWindowMakeGlContextCurrent(MaWindow *window);
 MaWindow *maWindowGetChild(MaWindow *window, int child_id);
 
 void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y));
@@ -207,5 +206,6 @@ void maWindowMouseButtonPressedCallback(MaWindow *window, void (*callback)(int b
 void maWindowMouseButtonReleasedCallback(MaWindow *window, void (*callback)(int button));
 
 bool maWindowMakeGlContext(MaWindow *window, int glVersionMajor, int glVersionMinor);
+void maWindowMakeGlContextCurrent(MaWindow *window);
 
 #endif
