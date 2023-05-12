@@ -168,6 +168,64 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 w->parent.keyReleasedCallback(keymap[wParam]);
             }
             return 0;
+        case WM_LBUTTONDOWN:
+            if (w->parent.mouseButtonPressedCallback) {
+                w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_LEFT);
+            }
+            return 0;
+        case WM_LBUTTONUP:
+            if (w->parent.mouseButtonReleasedCallback) {
+                w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_LEFT);
+            }
+            return 0;
+        case WM_RBUTTONDOWN:
+            if (w->parent.mouseButtonPressedCallback) {
+                w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_RIGHT);
+            }
+            return 0;
+        case WM_RBUTTONUP:
+            if (w->parent.mouseButtonReleasedCallback) {
+                w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_RIGHT);
+            }
+            return 0;
+        case WM_MBUTTONDOWN:
+            if (w->parent.mouseButtonPressedCallback) {
+                w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_MIDDLE);
+            }
+            return 0;
+        case WM_MBUTTONUP:
+            if (w->parent.mouseButtonReleasedCallback) {
+                w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_MIDDLE);
+            }
+            return 0;
+        case WM_XBUTTONDOWN:
+            if (w->parent.mouseButtonPressedCallback) {
+                w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_4 + HIWORD(wParam) - 1);
+            }
+            printf("xbuttondown %d\n", HIWORD(wParam) - 1);
+            return 0;
+        case WM_XBUTTONUP:
+            if (w->parent.mouseButtonReleasedCallback) {
+                w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_4 + HIWORD(wParam) - 1);
+            }
+            return 0;
+        case WM_MOUSEWHEEL:
+            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+                if (w->parent.mouseButtonPressedCallback) {
+                    w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_7);
+                }
+                if (w->parent.mouseButtonReleasedCallback) {
+                    w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_7);
+                }
+            } else {
+                if (w->parent.mouseButtonPressedCallback) {
+                    w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_8);
+                }
+                if (w->parent.mouseButtonReleasedCallback) {
+                    w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_8);
+                }
+            }
+            return 0;
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

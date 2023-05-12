@@ -24,24 +24,19 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
-void onWindowResize(int width, int height) {
-    printf("Window resized to %d x %d\n", width, height);
+void onMouse(int btn) {
+    printf("Mouse %d\n", btn);
 }
-
-void onWindowKeyPressed(int key) {
-    printf("Key pressed: %d\n", key);
-}
-
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)
         return 1;
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
-    maWindowKeyPressedCallback(window, onWindowKeyPressed);
     int child = maWindowAddChild(window, 320, 240, "Child");
     maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
-    maWindowResizeCallback(window, onWindowResize);
+    maWindowMouseButtonPressedCallback(window, onMouse);
+    maWindowMouseButtonReleasedCallback(window, onMouse);
     while (maWindowPollEvents(window)) {
         maWindowMakeGlContextCurrent(window);
         glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
