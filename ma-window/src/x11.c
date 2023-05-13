@@ -385,6 +385,8 @@ bool maWindowPollEvents(MaWindow *window) {
                 if (event.xconfigure.width != window->width || event.xconfigure.height != window->height) {
                     window->width = event.xconfigure.width;
                     window->height = event.xconfigure.height;
+                    if (window->hasGlContext)
+                        glViewport(0, 0, window->width, window->height);
                     if (window->resizeCallback)
                         window->resizeCallback(event.xconfigure.width, event.xconfigure.height);
                 }

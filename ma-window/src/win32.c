@@ -153,6 +153,8 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
             return 0;
         case WM_SIZE:
+            if (w->parent->hasGlContext)
+                glViewport(0, 0, window->width, window->height);
             if (w->parent.resizeCallback) {
                 w->parent.resizeCallback(LOWORD(lParam), HIWORD(lParam));
             }

@@ -18,8 +18,23 @@
  */
 
 #include <ma-window/ma-window.h>
-#include <GL/gl.h>
+#include <glad/gl.h>
 #include <stdio.h>
+
+
+const char *vertexShaderSource = "#version 400 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
+
+const char *fragmentShaderSource = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}\0";
 
 void onMouse(int btn) {
     printf("Mouse %d\n", btn);
@@ -30,20 +45,112 @@ int main() {
         return 1;
     if (!maWindowMakeGlContext(window, 4, 0))
         return 1;
-    int child = maWindowAddChild(window, 320, 240, "Child");
-    maWindowMakeGlContext(maWindowGetChild(window, child), 4, 0);
-    maWindowMouseButtonPressedCallback(window, onMouse);
-    maWindowMouseButtonReleasedCallback(window, onMouse);
-    while (maWindowPollEvents(window)) {
-        maWindowMakeGlContextCurrent(window);
-        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        maWindowSwapBuffers(window);
-        maWindowMakeGlContextCurrent(maWindowGetChild(window, child));
-        glClearColor(0.0f, 0.5f, 0.5f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        maWindowSwapBuffers(maWindowGetChild(window, child));
+    float verts[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+    };
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        sizeof(verts),
+        verts,
+        GL_STATIC_DRAW
+    );
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+    int success;
+    char infoLog[512];
+    glGetShaderiv(
+        vertexShader,
+        GL_COMPILE_STATUS,
+        &success
+    );
+    if (!success) {
+        glGetShaderInfoLog(
+            vertexShader,
+            512,
+            NULL,
+            infoLog
+        );
+        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infoLog);
     }
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(
+        fragmentShader,
+        1,
+        &fragmentShaderSource,
+        NULL
+    );
+    glCompileShader(fragmentShader);
+    glGetShaderiv(
+        fragmentShader,
+        GL_COMPILE_STATUS,
+        &success
+    );
+    if (!success) {
+        glGetShaderInfoLog(
+            fragmentShader,
+            512,
+            NULL,
+            infoLog
+        );
+        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n%s\n", infoLog);
+    }
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(
+        shaderProgram,
+        vertexShader
+    );
+    glAttachShader(
+        shaderProgram,
+        fragmentShader
+    );
+    glLinkProgram(shaderProgram);
+    glGetProgramiv(
+        shaderProgram,
+        GL_LINK_STATUS,
+        &success
+    );
+    if (!success) {
+        glGetProgramInfoLog(
+            shaderProgram,
+            512,
+            NULL,
+            infoLog
+        );
+        printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
+    }
+    glUseProgram(shaderProgram);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+    glVertexAttribPointer(
+        0,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        3 * sizeof(float),
+        (void*)0
+    );
+    glEnableVertexAttribArray(0);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    while (maWindowPollEvents(window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        maWindowSwapBuffers(window);
+    }
+    glDeleteProgram(shaderProgram);
     maWindowFree(window);
     return 0;
 }
