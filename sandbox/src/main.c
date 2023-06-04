@@ -36,9 +36,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\0";
 
-void onMouse(int btn) {
-    printf("Mouse %d\n", btn);
-}
 int main() {
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)

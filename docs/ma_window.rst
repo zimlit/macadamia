@@ -1,7 +1,7 @@
 ma-window
 =========
 
-this is a simple windowing library used by macademia.
+ma-window is a simple windowing library used by macademia.
 
 .. code-block:: c
     :caption: Sample code that makes a window with a purple background.
@@ -244,11 +244,11 @@ These macros are used to identify mouse buttons. Note that scrolling is consider
 .. c:macro:: MA_MOUSE_BUTTON_3
 .. c:macro:: MA_MOUSE_BUTTON_4
 
-    Scroll up
+    Scroll Down
 
 .. c:macro:: MA_MOUSE_BUTTON_5
 
-    Scroll down
+    Scroll up
 
 .. c:macro:: MA_MOUSE_BUTTON_6
 
@@ -260,6 +260,7 @@ These macros are used to identify mouse buttons. Note that scrolling is consider
 
 .. c:macro:: MA_MOUSE_BUTTON_8
 .. c:macro:: MA_MOUSE_BUTTON_9
+.. c:macro:: MA_MOUSE_BUTTON_10
 .. c:macro:: MA_MOUSE_BUTTON_LAST  
 .. c:macro:: MA_MOUSE_BUTTON_LEFT  
 .. c:macro:: MA_MOUSE_BUTTON_RIGHT 
