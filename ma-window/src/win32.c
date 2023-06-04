@@ -222,10 +222,10 @@ LRESULT CALLBACK maWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 }
             } else {
                 if (w->parent.mouseButtonPressedCallback) {
-                    w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_4);
+                    w->parent.mouseButtonPressedCallback(MA_MOUSE_BUTTON_6);
                 }
                 if (w->parent.mouseButtonReleasedCallback) {
-                    w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_4);
+                    w->parent.mouseButtonReleasedCallback(MA_MOUSE_BUTTON_6);
                 }
             }
             return 0;

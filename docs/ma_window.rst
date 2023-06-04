@@ -243,22 +243,21 @@ These macros are used to identify mouse buttons. Note that scrolling is consider
 .. c:macro:: MA_MOUSE_BUTTON_2
 .. c:macro:: MA_MOUSE_BUTTON_3
 .. c:macro:: MA_MOUSE_BUTTON_4
-
-    Scroll Down
-
 .. c:macro:: MA_MOUSE_BUTTON_5
 
     Scroll up
 
 .. c:macro:: MA_MOUSE_BUTTON_6
 
-    Scroll left
+    Scroll Down
 
 .. c:macro:: MA_MOUSE_BUTTON_7
     
-    Scroll right
+    Scroll left
 
 .. c:macro:: MA_MOUSE_BUTTON_8
+    Scroll right
+
 .. c:macro:: MA_MOUSE_BUTTON_9
 .. c:macro:: MA_MOUSE_BUTTON_10
 .. c:macro:: MA_MOUSE_BUTTON_LAST  
