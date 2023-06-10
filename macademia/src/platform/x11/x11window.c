@@ -401,11 +401,11 @@ bool maWindowPollEvents(MaWindow *window) {
                 break;
             case ButtonPress:
                 if (window->mouseButtonPressedCallback)
-                    window->mouseButtonPressedCallback(event.xbutton.button);
+                    window->mouseButtonPressedCallback(event.xbutton.button-1);
                 break;
             case ButtonRelease:
                 if (window->mouseButtonReleasedCallback)
-                    window->mouseButtonReleasedCallback(event.xbutton.button);
+                    window->mouseButtonReleasedCallback(event.xbutton.button-1);
                 break;
         }
     }
