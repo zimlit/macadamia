@@ -40,7 +40,7 @@ void onMouse(int btn) {
     printf("Mouse %d\n", btn);
 }
 int main() {
-    MA_LOG_FIELDS(NULL, MaInfo, "test", "field", "2");
+    MA_LOG_FIELDS(MaInfo, "test", "field", "2");
     MaWindow *window = maWindowNew(640, 480, "Hello, World!");
     if (!window)
         return 1;

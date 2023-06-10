@@ -27,10 +27,6 @@ void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLe
     va_list argv;
     va_start(argv, argc);
 
-    if (stream == NULL) {
-        stream = stdout;
-    }
-
     char levelstr[5];
     switch (level ){
         case MaInfo:
