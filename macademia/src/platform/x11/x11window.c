@@ -24,6 +24,7 @@
 #include <GL/glx.h>
 #include <stdio.h>
 #include <string.h>
+#include <macademia/log.h>
 
 static uint32_t keymap[] = {
     [XK_space] = MA_KEY_SPACE,
@@ -217,6 +218,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     window->display = XOpenDisplay(NULL);
     if (window->display == NULL) {
+        MA_LOG_FIELDS(MaFatal, "failed to open display", "window", title);
         free(window);
         return NULL;
     }
@@ -242,12 +244,14 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     if ( !glXQueryVersion(window->display, &glx_major, &glx_minor ) || 
        ( ( glx_major == 1 ) && ( glx_minor < 3 ) ) || ( glx_major < 1 ) ){
+        MA_LOG_FIELDS(MaFatal, "insufficient glx version", "window", title);
         return NULL;
     }
 
     int fbcount = 0;
     GLXFBConfig *fbc = glXChooseFBConfig(window->display, DefaultScreen(window->display), visual_attribs, &fbcount);
     if (!fbc) {
+        MA_LOG_FIELDS(MaFatal, "no matching framebuffer config", "window", title);
         free(window);
         return NULL;
     }
@@ -285,6 +289,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
                                      vi->visual, 
                                      CWBorderPixel|CWColormap|CWEventMask, &swa );
     if (!window->xwindow) {
+        MA_LOG_FIELDS(MaFatal, "failed to open window", "window", title);
         free(window);
         return NULL;
     }
@@ -297,6 +302,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     XMapWindow(window->display, window->xwindow);
     XFlush(window->display);
+    MA_LOG_FIELDS(MaInfo, "opened window", "window", title);
     return (MaWindow *)window;
 }
 
@@ -328,7 +334,7 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     window->glxContext = 0;
     if ( !isExtensionSupported( glxExts, "GLX_ARB_create_context" ) ||
        !glXCreateContextAttribsARB ) {
-        printf("cant find ext");
+        MA_LOG(MaError, "unable to find required glx extension");
         return false;
     }
 
@@ -345,6 +351,7 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
     XSync( window->display, False );
 
     if ( !window->glxContext ) {
+        MA_LOG(MaError, "unable to create glx context");
         return false;
     }
 
@@ -356,8 +363,11 @@ bool maWindowMakeGlContext(MaWindow *w, int major, int minor) {
 
     int gl_version = gladLoaderLoadGL();
     if (!gl_version) {
+        MA_LOG(MaError, "failed to load opengl");
         return false;
     }
+
+    MA_LOG_FIELDS(MaInfo, "created glx context for window", "window", w->title);
 
     return true;
 }
