@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with macademia.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MA_WINDOW_H
-#define MA_WINDOW_H
+#ifndef MACADEMIA_WINDOW_H
+#define MACADEMIA_WINDOW_H
 
 #include <stdbool.h>
 

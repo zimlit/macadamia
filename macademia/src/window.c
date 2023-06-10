@@ -17,7 +17,7 @@
  * along with macademia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ma-window/ma-window.h>
+#include <macademia/window.h>
 #include <stdlib.h>
 
 void maWindowMouseMovedCallback(MaWindow *window, void (*callback)(int x, int y)) {

@@ -17,7 +17,7 @@
  * along with macademia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ma-window/ma-window.h>
+#include <macademia/window.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <glad/gl.h>

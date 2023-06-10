@@ -1,4 +1,4 @@
-#include <ma-window/ma-window.h>
+#include <macademia/window.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <glad/wgl.h>

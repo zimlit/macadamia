@@ -7,5 +7,6 @@ project(
     LANGUAGES C
 )
 
-add_subdirectory(ma-window)
+add_subdirectory(macademia)
+
 add_subdirectory(sandbox)

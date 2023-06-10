@@ -3,6 +3,9 @@
         "camera": "c",
         "graphicscontext": "c",
         "viewport": "c",
-        "khrplatform.h": "c"
-    }
+        "khrplatform.h": "c",
+        "stdlib.h": "c",
+        "glx.h": "c"
+    },
+    "licenser.projectName": "Macademia"
 }
