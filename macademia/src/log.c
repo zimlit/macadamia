@@ -22,7 +22,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, const char *fields[]) {
+void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, int argc, ...) {
+    if (argc % 2 != 0) return;
+    va_list argv;
+    va_start(argv, argc);
+
     if (stream == NULL) {
         stream = stdout;
     }
@@ -45,14 +49,35 @@ void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLe
 
     time_t t = time(0);
 
-    printf(
-        "{\n\t\"time\": \"%ld\",\n"
+    fprintf(
+        stream,
+        "{\n\t\"time\": %ld,\n"
         "\t\"level\": \"%s\",\n"
         "\t\"file\": \"%s\",\n"
-        "\t\"line\": \"%d\",\n"
+        "\t\"line\": %d,\n"
         "\t\"function\": \"%s\",\n"
-        "\t\"message\": \"%s\"\n"
-        "}\n",
+        "\t\"message\": \"%s\"",
         t, levelstr, file, line, func, message
     );
+
+    if (argc > 0) {
+        fprintf(stream, ",\n");
+    } else {
+        fprintf(stream, "\n");
+    }
+
+    for (int i = 0; i < argc; i++) {
+        fprintf(stream, "\t\"%s\": ", va_arg(argv, const char *));
+        fprintf(stream, "\"%s\"", va_arg(argv, const char *));
+        i++;
+        if (i + 1 < argc) {
+            fprintf(stream, ",\n");
+        } else {
+            fprintf(stream, "\n");
+        }
+    }
+
+    fprintf(stream, "}\n");
+
+    va_end(argv);
 }

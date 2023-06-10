@@ -27,9 +27,11 @@ typedef enum {
     MaFatal,
 } MaLogLevel;
 
-void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, const char *fields[]);
+void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, int args, ...);
 
-#define MA_LOG(stream, level, fmt, fields) __maLog(__FILE__, __LINE__, __func__, stream, level, fmt, fields)
-#define MA_LOGF(stream, level, fmt, fields, ...) __maLog(__FILE__, __LINE__, __func__, stream, level, fmt, fields, __VA_ARGS__)
+#define NUMARGS(...)  (sizeof((const char *[]){__VA_ARGS__})/sizeof(const char *))
+
+#define MA_LOG(stream, level, message) __maLog(__FILE__, __LINE__, __func__, stream, level, message, 0)
+#define MA_LOG_FIELDS(stream, level, message, ...) __maLog(__FILE__, __LINE__, __func__, stream, level, message, NUMARGS(__VA_ARGS__), __VA_ARGS__)
 
 #endif
