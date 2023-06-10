@@ -18,4 +18,18 @@
 #ifndef MACADEMIA_LOG_H
 #define MACADEMIA_LOG_H
 
+#include <stdio.h>
+
+typedef enum {
+    MaInfo,
+    MaWarn,
+    MaError,
+    MaFatal,
+} MaLogLevel;
+
+void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, const char *fields[]);
+
+#define MA_LOG(stream, level, fmt, fields) __maLog(__FILE__, __LINE__, __func__, stream, level, fmt, fields)
+#define MA_LOGF(stream, level, fmt, fields, ...) __maLog(__FILE__, __LINE__, __func__, stream, level, fmt, fields, __VA_ARGS__)
+
 #endif
