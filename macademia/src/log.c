@@ -24,6 +24,7 @@
 
 void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, int argc, ...) {
     if (argc % 2 != 0) return;
+    if (level < MA_LOG_LEVEL) return;
     va_list argv;
     va_start(argv, argc);
 

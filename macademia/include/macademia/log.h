@@ -18,7 +18,8 @@
 #ifndef MACADEMIA_LOG_H
 #define MACADEMIA_LOG_H
 
-#define LOG_FILE stdout
+#define MA_LOG_FILE stdout
+#define MA_LOG_LEVEL MaInfo
 
 #include <stdio.h>
 
@@ -33,7 +34,7 @@ void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLe
 
 #define NUMARGS(...)  (sizeof((const char *[]){__VA_ARGS__})/sizeof(const char *))
 
-#define MA_LOG(level, message) __maLog(__FILE__, __LINE__, __func__, LOG_FILE, level, message, 0)
-#define MA_LOG_FIELDS(level, message, ...) __maLog(__FILE__, __LINE__, __func__, LOG_FILE, level, message, NUMARGS(__VA_ARGS__), __VA_ARGS__)
+#define MA_LOG(level, message) __maLog(__FILE__, __LINE__, __func__, MA_LOG_FILE, level, message, 0)
+#define MA_LOG_FIELDS(level, message, ...) __maLog(__FILE__, __LINE__, __func__, MA_LOG_FILE, level, message, NUMARGS(__VA_ARGS__), __VA_ARGS__)
 
 #endif
