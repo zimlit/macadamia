@@ -22,6 +22,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+const char* levelstrs[] = {
+    [MaInfo] = "info",
+    [MaWarn] = "warn",
+    [MaError] = "error",
+    [MaFatal] = "fatal",
+};
+
 void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLevel level, const char *message, int argc, ...) {
     if (argc % 2 != 0) return;
     if (level < MA_LOG_LEVEL) return;
@@ -33,12 +40,12 @@ void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLe
     fprintf(
         stream,
         "{\n\t\"time\": %ld,\n"
-        "\t\"level\": %d,\n"
+        "\t\"level\": \"%s\",\n"
         "\t\"file\": \"%s\",\n"
         "\t\"line\": %d,\n"
         "\t\"function\": \"%s\",\n"
         "\t\"message\": \"%s\"",
-        (long)t, level, file, line, func, message
+        (long)t, levelstrs[level], file, line, func, message
     );
 
     if (argc > 0) {
