@@ -204,6 +204,8 @@ bool isExtensionSupported(const char *extList, const char *extension) {
 
 MaWindow *maWindowNew(int width, int height, const char *title) {
     X11Window *window = malloc(sizeof(X11Window));
+    if (!window)
+        return NULL;
     window->parent.hasGlContext = false;
     window->parent.width = width;
     window->parent.height = height;

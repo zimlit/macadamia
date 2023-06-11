@@ -4,6 +4,7 @@
 #include <glad/wgl.h>
 #include <glad/gl.h>
 #include <stdint.h>
+#include <macademia/log.h>
 
 #ifndef UNICODE
 #define UNICODE
@@ -283,6 +284,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
     SetWindowLongPtr(window->hwnd, GWLP_USERDATA, (LONG_PTR)window);
 
     if (window->hwnd == NULL) {
+        MA_LOG_FIELDS(MaFatal, "failed to create HWND", "window", title);
         free(window);
         return NULL;
     }
@@ -291,6 +293,7 @@ MaWindow *maWindowNew(int width, int height, const char *title) {
 
     ShowWindow(window->hwnd, SW_SHOWDEFAULT);
 
+    MA_LOG_FIELDS(MaInfo, "opened window", "window", title);
     return (MaWindow *)window;
 }
 
@@ -351,7 +354,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     if (!fakeWND) {
         free(window);
         char msg[256];
-        MessageBoxA(NULL, itoa(GetLastError(), msg, 10), "fakewnd Error", MB_OK | MB_ICONEXCLAMATION);
+        MA_LOG(MaError, "failed to create fake window");
         return false;
     }
 
@@ -370,12 +373,14 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     
     int fakePFDID = ChoosePixelFormat(fakeDC, &fakePFD);
     if (fakePFDID == 0) {
+        MA_LOG(MaError, "failed to choose fake pixel format");
         DestroyWindow(fakeWND);
         free(window);
         return false;
     }
 
     if (!SetPixelFormat(fakeDC, fakePFDID, &fakePFD)) {
+        MA_LOG(MaError, "failed to set fake pixel format");
         DestroyWindow(fakeWND);
         free(window);
         return false;
@@ -383,11 +388,13 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
 
     HGLRC fakeRC = wglCreateContext(fakeDC);
     if (!fakeRC) {
+        MA_LOG(MaError, "failed to create fake GL context");
         DestroyWindow(fakeWND);
         free(window);
         return false;
     }
     if (!wglMakeCurrent(fakeDC, fakeRC)) {
+        MA_LOG(MaError, "failed to make fake GL context current");
         wglDeleteContext(fakeRC);
         DestroyWindow(fakeWND);
         free(window);
@@ -415,6 +422,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     bool status = wglChoosePixelFormatARB(window->hdc, pixelAttribs, NULL, 1, &pixelFormatID, &numFormats);
     
     if (!status || numFormats == 0) {
+        MA_LOG(MaError, "failed to choose pixel format");
         DestroyWindow(window->hwnd);
         free(window);
         return false;
@@ -433,6 +441,7 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
     
     HGLRC RC = wglCreateContextAttribsARB(window->hdc, 0, contextAttribs);
     if (RC == NULL) {
+        MA_LOG(MaError, "failed to create GL context");
         DestroyWindow(window->hwnd);
         maWindowFree(pwindow);
         return false;
@@ -456,9 +465,11 @@ bool maWindowMakeGlContext(MaWindow *pwindow, int major, int minor) {
 
     int gl_version = gladLoaderLoadGL();
     if (!gl_version) {
+        MA_LOG(MaError, "failed to load GL");
         return false;
     }
 
+    MA_LOG_FIELDS(MaInfo, "created GL context", "window", pwindow->title);
     return true;
 }
 

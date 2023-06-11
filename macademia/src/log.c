@@ -27,33 +27,17 @@ void __maLog(const char* file, int line, const char *func, FILE *stream, MaLogLe
     va_list argv;
     va_start(argv, argc);
 
-    char levelstr[5];
-    switch (level ){
-        case MaInfo:
-            strncpy(levelstr, "info", 4);
-            break;
-        case MaWarn:
-            strncpy(levelstr, "warn", 4);
-            break;
-        case MaError:
-            strncpy(levelstr, "error", 5);
-            break;
-        case MaFatal:
-            strncpy(levelstr, "fatal", 5);
-            break;
-    }
-
     time_t t = time(0);
 
     fprintf(
         stream,
         "{\n\t\"time\": %ld,\n"
-        "\t\"level\": \"%s\",\n"
+        "\t\"level\": %d,\n"
         "\t\"file\": \"%s\",\n"
         "\t\"line\": %d,\n"
         "\t\"function\": \"%s\",\n"
         "\t\"message\": \"%s\"",
-        t, levelstr, file, line, func, message
+        (long)t, level, file, line, func, message
     );
 
     if (argc > 0) {
